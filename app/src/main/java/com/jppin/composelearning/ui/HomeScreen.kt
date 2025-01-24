@@ -2,9 +2,12 @@ package com.jppin.composelearning.ui
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -14,8 +17,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.jppin.composelearning.Feature
 import com.jppin.composelearning.R
 import com.jppin.composelearning.ui.theme.*
 
@@ -33,6 +38,30 @@ fun HomeScreen() {
             ChipSection(chips = listOf("Sweet sleep", "Insomnia", "Depression"))
             CurrentMeditation()
             FilterSection(filters = listOf("Most recent", "Not listened", "Listened"))
+            FeaturesGrid(
+                features = listOf(
+                    Feature(
+                        title = "Sleep meditation",
+                        R.drawable.baseline_headphones_24,
+                        DarkerButtonBlue
+                    ),
+                    Feature(
+                        title = "Tips for sleeping",
+                        R.drawable.baseline_videocam_24,
+                        LightGreen1
+                    ),
+                    Feature(
+                        title = "Night island",
+                        R.drawable.baseline_headphones_24,
+                        OrangeYellow1
+                    ),
+                    Feature(
+                        title = "Calming sounds",
+                        R.drawable.baseline_headphones_24,
+                        LightRed
+                    ),
+                )
+            )
         }
     }
 }
@@ -79,19 +108,12 @@ fun ChipSection(
     var selectedChipIndex by remember{
         mutableIntStateOf(0)
     }
-
-    val additionalChips = mutableListOf<String>()
-    for (i in 1..10) {
-        additionalChips.add("Chip $i")
-    }
-    val allChips = chips + additionalChips
-
         LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 10.dp)
         ) {
-            items(allChips.size) { index ->
+            items(chips.size) { index ->
                 val isSelected = selectedChipIndex == index
                 val backgroundColor by animateColorAsState(
                     targetValue = if (isSelected) ButtonBlue else DarkerButtonBlue,
@@ -108,7 +130,7 @@ fun ChipSection(
                         }
                         .padding(15.dp)
                 ) {
-                    Text(text = allChips[index], color = TextWhite,
+                    Text(text = chips[index], color = TextWhite,
                     fontFamily = gothicaFontFamily, fontWeight = FontWeight.ExtraBold,)
                 }
             }
@@ -195,7 +217,7 @@ fun FilterSection (
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .padding(end = 10.dp,top = 15.dp, bottom = 15.dp)
+                    .padding(end = 10.dp, top = 15.dp, bottom = 15.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .background(backgroundColor)
                     .clickable {
@@ -210,9 +232,86 @@ fun FilterSection (
     }
 }
 
-@Preview
+
 @Composable
-fun ChipSectionPreview() {
-    ChipSection(chips = listOf("Option 1", "Option 2", "Option 3"))
+fun FeaturesGrid(
+    features: List<Feature>
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = "Featured",
+            style = MaterialTheme.typography.headlineMedium,
+            color = TextWhite,
+            fontFamily = gothicaFontFamily, fontWeight = FontWeight.ExtraBold,
+            modifier = Modifier
+                .padding(start = 15.dp, top = 15.dp)
+        )
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(start = 7.5.dp, end = 7.5.dp, bottom = 100.dp, top = 20.dp),
+            modifier = Modifier.fillMaxHeight()
+        ) {
+            items(features.size) {
+                FeatureItem(feature = features[it])
+            }
+        }
+    }
 }
+
+@Composable
+fun FeatureItem(
+    feature: Feature
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .height(200.dp)
+            .padding(horizontal = 10.dp, vertical = 15.dp)
+            .background(feature.lightColor, RoundedCornerShape(10.dp))
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = feature.title,
+                style = MaterialTheme.typography.headlineMedium,
+                lineHeight = 40.sp,
+                color = TextWhite,
+                fontFamily = gothicaFontFamily,
+                fontWeight = FontWeight.ExtraBold,
+                modifier = Modifier
+                    .padding(bottom = 10.dp)
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Icon(
+                    painter = painterResource(feature.iconId),
+                    contentDescription = feature.title,
+                    tint = Color.White,
+                    modifier = Modifier
+                        .padding(end = 5.dp)
+                        .size(35.dp)
+                )
+                Text(
+                    text = "Start",
+                    color = TextWhite,
+                    fontFamily = gothicaFontFamily,
+                    fontWeight = FontWeight.ExtraBold,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(ButtonBlue)
+                        .clickable { }
+                        .padding(vertical = 8.dp, horizontal = 16.dp)
+                )
+            }
+        }
+    }
+}
+
 
