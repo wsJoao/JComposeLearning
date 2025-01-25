@@ -1,10 +1,9 @@
-package com.jppin.composelearning.ui
+package com.jppin.composelearning.ui.screens
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -25,14 +24,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jppin.composelearning.BottomMenuContent
-import com.jppin.composelearning.Feature
+import com.jppin.composelearning.ui.features.Feature
 import com.jppin.composelearning.R
 import com.jppin.composelearning.ui.theme.*
 
 @Composable
 fun HomeScreen() {
-
     Box(
         modifier = Modifier
             .background(DeepBlue)
@@ -70,17 +67,10 @@ fun HomeScreen() {
                         R.drawable.ic_headphone,
                         R.drawable.kermit_icon4,
                         LightRed
-                    ),
+                    )
                 )
             )
         }
-        BottomMenu(items = listOf(
-            BottomMenuContent("Home", R.drawable.ic_home),
-            BottomMenuContent("Meditate", R.drawable.ic_bubble),
-            BottomMenuContent("Sleep", R.drawable.ic_moon),
-            BottomMenuContent("Music", R.drawable.ic_music),
-            BottomMenuContent("Profile", R.drawable.ic_profile),
-        ), modifier = Modifier.align(Alignment.BottomCenter))
     }
 }
 
@@ -194,10 +184,10 @@ fun CurrentMeditation(
 
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.baseline_play_arrow_24),
+                painter = painterResource(id = R.drawable.ic_play),
                 contentDescription = "Play",
                 tint = Color.White,
-                modifier = Modifier.size(60.dp)
+                modifier = Modifier.size(20.dp)
             )
         }
     }
@@ -218,7 +208,8 @@ fun FeaturesGrid(
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(start = 7.5.dp, end = 7.5.dp, bottom = 100.dp, top = 20.dp),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .heightIn(max = 400.dp)
         ) {
             items(features.size) {
@@ -301,81 +292,6 @@ fun FeatureItem(
         }
     }
 }
-@Composable
-fun BottomMenu(
-    items: List<BottomMenuContent>,
-    modifier: Modifier = Modifier,
-    activeHighlightColor: Color = ButtonBlue,
-    activeTextColor: Color = Color.White,
-    inactiveTextColor: Color = AquaBlue,
-    initialSelectedItemIndex: Int = 0
-) {
-    var selectedItemIndex by remember {
-        mutableIntStateOf(initialSelectedItemIndex)
-    }
-    Row(
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-            .background(DeepBlue)
-            .padding(15.dp)
-    ){
-        items.forEachIndexed{ index, item ->
-            BottomMenuItem(
-                item = item,
-                isSelected = index == selectedItemIndex,
-                activeHighlightColor = activeHighlightColor,
-                activeTextColor = activeTextColor,
-                inactiveTextColor = inactiveTextColor
-            ) {
-                selectedItemIndex = index
-            }
 
-        }
-    }
-}
-
-@Composable
-fun BottomMenuItem(
-    item: BottomMenuContent,
-    isSelected: Boolean = false,
-    activeHighlightColor: Color = ButtonBlue,
-    activeTextColor: Color = Color.White,
-    inactiveTextColor: Color = AquaBlue,
-    onItemClick: () -> Unit
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .clip(RoundedCornerShape(10.dp))
-            .clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() },
-            ) { onItemClick() }
-
-    ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .clip(RoundedCornerShape(10.dp))
-                .background(if(isSelected) activeHighlightColor else Color.Transparent)
-                .padding(10.dp)
-        ) {
-            Icon(
-                painter = painterResource(id = item.iconId),
-                contentDescription = item.title,
-                tint = if(isSelected) activeTextColor else inactiveTextColor,
-                modifier = Modifier.size(20.dp)
-
-            )
-        }
-        Text(
-            text = item.title,
-            color = if(isSelected) activeTextColor else inactiveTextColor
-        )
-    }
-}
 
 

@@ -1,4 +1,4 @@
-package com.jppin.composelearning
+package com.jppin.composelearning.ui.features
 
 import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color

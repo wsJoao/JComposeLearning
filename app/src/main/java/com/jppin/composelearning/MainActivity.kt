@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.jppin.composelearning.ui.HomeScreen
+import com.jppin.composelearning.ui.navigation.NavigationBar
 import com.jppin.composelearning.ui.theme.ComposeLearningTheme
 
 
@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeLearningTheme {
-                HomeScreen()
+                NavigationBar()
             }
         }
     }
